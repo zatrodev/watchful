@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "168364402816",
+    "project_id": "watchful-incident-app",
+    "storage_bucket": "watchful-incident-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:168364402816:android:6ddc75dc0f770aed6b5e65",
+        "android_client_info": {
+          "package_name": "com.zatro.watchful"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "168364402816-tahr1tf5vacb001egcsf7vbfk4tiac33.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDS3G2juSyThyEF_2jIH0BsF3WKb_e8bIw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "168364402816-tahr1tf5vacb001egcsf7vbfk4tiac33.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
