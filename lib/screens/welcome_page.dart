@@ -20,7 +20,7 @@ class _WelcomePageState extends State<WelcomePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(
-            "assets/images/img1.png",
+            "assets/images/phone_auth_img.png",
             width: 150,
             height: 150,
           ),
@@ -29,7 +29,7 @@ class _WelcomePageState extends State<WelcomePage> {
           ),
           const Text(
             "Watchful",
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           const SizedBox(
             height: 10,
@@ -38,20 +38,39 @@ class _WelcomePageState extends State<WelcomePage> {
             "An incident reporting app.",
             style: TextStyle(
               fontSize: 16,
+              color: Colors.black45,
             ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(
             height: 30,
           ),
-          SignInButton(
-            Buttons.Google,
-            padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+          ElevatedButton(
             onPressed: () {
-              AuthService().signInWithGoogle(context, () {
-                Navigator.pushNamed(context, "phoneAuth");
+              AuthService().signInWithGoogle().then((credential) {
+                if (credential.user!.phoneNumber != "") {
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    '/',
+                    (route) => false,
+                  );
+                } else {
+                  Navigator.pushNamed(context, "phoneAuth");
+                }
               });
             },
+            style: ElevatedButton.styleFrom(
+              shape: const CircleBorder(),
+              padding: const EdgeInsets.all(20),
+              elevation: 5,
+              backgroundColor: Colors.white, // <-- Buttson color
+              foregroundColor: Colors.grey, // <-- Splash color
+            ),
+            child: Image.asset(
+              "assets/images/google_icon.png",
+              width: 25,
+              height: 25,
+            ),
           )
         ],
       ),

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 class PhoneAuth extends StatefulWidget {
   const PhoneAuth({Key? key}) : super(key: key);
 
+  static String verificationId = "";
+
   @override
   State<PhoneAuth> createState() => _PhoneAuthState();
 }
@@ -38,7 +40,7 @@ class _PhoneAuthState extends State<PhoneAuth> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              "assets/images/img1.png",
+              "assets/images/phone_auth_img.png",
               width: 150,
               height: 150,
             ),
@@ -128,11 +130,11 @@ class _PhoneAuthState extends State<PhoneAuth> {
                             .signInWithCredential(credential);
                       },
                       verificationFailed: (FirebaseAuthException e) {
-                        print(e.message);
+                        // catch error
                       },
-                      codeSent:
-                          (String verificationId, int? resendToken) async {
-                        Navigator.pushNamed(context, 'verify');
+                      codeSent: (String verificationId, int? resendToken) {
+                        PhoneAuth.verificationId = verificationId;
+                        Navigator.pushNamed(context, 'phoneVerify');
                       },
                       codeAutoRetrievalTimeout: (String verificationId) {},
                     );

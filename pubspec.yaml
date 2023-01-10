@@ -41,6 +41,7 @@ dependencies:
     firebase_analytics: ^10.0.7
     flutter_signin_button:
     google_sign_in: ^5.4.2
+    pinput: ^2.2.21
 
 dev_dependencies:
     flutter_test:
