@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -22,6 +24,8 @@ class AuthService {
     final GoogleSignInAccount? googleUser =
         await GoogleSignIn(scopes: <String>["email"]).signIn();
 
+    log(googleUser.toString());
+
     final GoogleSignInAuthentication googleAuth =
         await googleUser!.authentication;
 
@@ -33,12 +37,12 @@ class AuthService {
 
   Future<PhoneAuthCredential> verifyPhoneNumber(String smsCode) async {
     PhoneAuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: PhoneAuth.verificationId, smsCode: smsCode);
+        verificationId: PhoneAuthPage.verificationId, smsCode: smsCode);
 
     return credential;
   }
 
-  signOut() {
-    FirebaseAuth.instance.signOut();
+  signOut() async {
+    await FirebaseAuth.instance.signOut();
   }
 }

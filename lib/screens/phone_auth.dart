@@ -1,16 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class PhoneAuth extends StatefulWidget {
-  const PhoneAuth({Key? key}) : super(key: key);
+class PhoneAuthPage extends StatefulWidget {
+  const PhoneAuthPage({Key? key}) : super(key: key);
 
   static String verificationId = "";
 
   @override
-  State<PhoneAuth> createState() => _PhoneAuthState();
+  State<PhoneAuthPage> createState() => _PhoneAuthPageState();
 }
 
-class _PhoneAuthState extends State<PhoneAuth> {
+class _PhoneAuthPageState extends State<PhoneAuthPage> {
   late final TextEditingController _countryCode;
   late final TextEditingController _number;
 
@@ -133,7 +133,7 @@ class _PhoneAuthState extends State<PhoneAuth> {
                         // catch error
                       },
                       codeSent: (String verificationId, int? resendToken) {
-                        PhoneAuth.verificationId = verificationId;
+                        PhoneAuthPage.verificationId = verificationId;
                         Navigator.pushNamed(context, 'phoneVerify');
                       },
                       codeAutoRetrievalTimeout: (String verificationId) {},

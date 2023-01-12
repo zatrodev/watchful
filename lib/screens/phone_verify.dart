@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 import 'package:watchful/auth_service.dart';
 
-class PhoneVerify extends StatefulWidget {
-  const PhoneVerify({Key? key}) : super(key: key);
+class PhoneVerifyPage extends StatefulWidget {
+  const PhoneVerifyPage({Key? key}) : super(key: key);
 
   @override
-  State<PhoneVerify> createState() => _PhoneVerifyState();
+  State<PhoneVerifyPage> createState() => _PhoneVerifyPageState();
 }
 
-class _PhoneVerifyState extends State<PhoneVerify> {
+class _PhoneVerifyPageState extends State<PhoneVerifyPage> {
   late final TextEditingController _smsCodeController;
 
   @override
