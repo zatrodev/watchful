@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class IncidentCard extends StatefulWidget {
+class IncidentCard extends StatelessWidget {
   final String type;
   final String description;
   final String location;
@@ -16,11 +16,6 @@ class IncidentCard extends StatefulWidget {
       required this.image});
 
   @override
-  State<IncidentCard> createState() => _IncidentCardState();
-}
-
-class _IncidentCardState extends State<IncidentCard> {
-  @override
   Widget build(BuildContext context) {
     return Card(
       clipBehavior: Clip.antiAlias,
@@ -30,20 +25,20 @@ class _IncidentCardState extends State<IncidentCard> {
           ListTile(
             leading: const Icon(Icons.arrow_drop_down_circle),
             title: Text(
-              widget.type,
+              type,
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             subtitle: Row(
               children: [
                 Text(
-                  widget.location,
+                  location,
                   style: TextStyle(color: Colors.black.withOpacity(0.6)),
                 ),
                 const SizedBox(
                   width: 10,
                 ),
                 Text(
-                  widget.date,
+                  date,
                   style: TextStyle(color: Colors.black.withOpacity(0.6)),
                 ),
               ],
@@ -55,14 +50,14 @@ class _IncidentCardState extends State<IncidentCard> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: AssetImage(widget.image),
+                image: AssetImage(image),
               ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
-              widget.description,
+              description,
               style: const TextStyle(color: Colors.black),
               textAlign: TextAlign.justify,
             ),

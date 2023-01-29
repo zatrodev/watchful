@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:watchful/auth_service.dart';
 import 'package:watchful/firebase_options.dart';
+import 'package:watchful/screens/add_incident.dart';
 import 'package:watchful/screens/phone_auth.dart';
 import 'package:watchful/screens/phone_verify.dart';
 
@@ -18,6 +19,7 @@ class Watchful extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Watchful',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -27,6 +29,7 @@ class Watchful extends StatelessWidget {
         '/': (context) => AuthService().handleAuthState(),
         'phoneAuth': (context) => const PhoneAuthPage(),
         'phoneVerify': (context) => const PhoneVerifyPage(),
+        'addIncident': (context) => const AddIncidentPage()
       },
     );
   }

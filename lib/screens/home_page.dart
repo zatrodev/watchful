@@ -36,7 +36,9 @@ class HomePage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, "addIncident");
+        },
         backgroundColor: Colors.green,
         child: const Icon(Icons.add),
       ),
