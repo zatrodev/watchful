@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
-import 'package:watchful/auth_service.dart';
+import 'package:watchful/services/auth/auth_service.dart';
 
 class PhoneVerifyPage extends StatefulWidget {
   const PhoneVerifyPage({Key? key}) : super(key: key);

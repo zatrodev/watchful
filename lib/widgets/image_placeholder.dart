@@ -1,30 +1,25 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 class ImagePlaceholder extends StatefulWidget {
-  const ImagePlaceholder({Key? key}) : super(key: key);
+  final VoidCallback? onTap;
+  final File? image;
+
+  const ImagePlaceholder({Key? key, required this.onTap, required this.image})
+      : super(key: key);
 
   @override
   State<ImagePlaceholder> createState() => _ImagePlaceholderState();
 }
 
 class _ImagePlaceholderState extends State<ImagePlaceholder> {
-  String? imagePath;
-
   @override
   Widget build(BuildContext context) {
     return Card(
         elevation: 3,
         child: InkWell(
-          onTap: () async {
-            XFile? image =
-                await ImagePicker().pickImage(source: ImageSource.camera);
-            setState(() {
-              imagePath = image!.path;
-            });
-          },
-          child: imagePath == null
+          onTap: widget.onTap,
+          child: widget.image == null
               ? Container(
                   padding:
                       const EdgeInsets.symmetric(vertical: 18, horizontal: 25),
@@ -46,14 +41,18 @@ class _ImagePlaceholderState extends State<ImagePlaceholder> {
                     ],
                   ),
                 )
-              : Container(
-                  height: 300,
-                  width: 300,
-                  padding: const EdgeInsets.all(10.0),
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                        fit: BoxFit.cover, image: FileImage(File(imagePath!))),
-                  )),
+              : Transform(
+                  alignment: Alignment.center,
+                  transform: Matrix4.rotationZ(-3.14 / 2),
+                  child: Container(
+                      height: 300,
+                      width: 300,
+                      padding: const EdgeInsets.all(10.0),
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                            fit: BoxFit.cover, image: FileImage(widget.image!)),
+                      )),
+                ),
         ));
   }
 }

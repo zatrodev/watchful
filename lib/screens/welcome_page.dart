@@ -1,5 +1,5 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:watchful/auth_service.dart';
+import 'package:watchful/services/auth/auth_service.dart';
 import 'package:flutter/material.dart';
 
 class WelcomePage extends StatelessWidget {

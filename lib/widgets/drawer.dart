@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:watchful/auth_service.dart';
+import 'package:watchful/services/auth/auth_service.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
@@ -84,8 +84,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
               ),
               title: const Text('Log Out'),
               onTap: () {
-                showLogOutDialog(context).then((value) async =>
-                    value ? await AuthService().signOut() : "");
+                showLogOutDialog(context).then(
+                    (value) async => value ? await AuthService().logOut() : "");
               },
             ),
           ),

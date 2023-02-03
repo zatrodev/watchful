@@ -2,47 +2,50 @@ import 'package:flutter/material.dart';
 
 class IncidentCard extends StatelessWidget {
   final String type;
-  final String description;
-  final String location;
+  final String desc;
+  final String loc;
   final String date;
-  final String image;
+  final String img;
 
   const IncidentCard(
       {super.key,
       required this.type,
-      required this.description,
-      required this.location,
+      required this.desc,
+      required this.loc,
       required this.date,
-      required this.image});
+      required this.img});
 
   @override
   Widget build(BuildContext context) {
     return Card(
       clipBehavior: Clip.antiAlias,
-      elevation: 2.0,
+      elevation: 0,
+      shape: Border(bottom: BorderSide(color: Theme.of(context).dividerColor)),
       child: Column(
         children: [
           ListTile(
-            leading: const Icon(Icons.arrow_drop_down_circle),
+            leading: const Icon(
+              Icons.warning,
+            ),
             title: Text(
               type,
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-            subtitle: Row(
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  location,
-                  style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                  loc,
                 ),
                 const SizedBox(
                   width: 10,
                 ),
                 Text(
                   date,
-                  style: TextStyle(color: Colors.black.withOpacity(0.6)),
                 ),
               ],
             ),
+            isThreeLine: true,
           ),
           Container(
             width: MediaQuery.of(context).size.width,
@@ -50,32 +53,28 @@ class IncidentCard extends StatelessWidget {
             decoration: BoxDecoration(
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: AssetImage(image),
+                image: NetworkImage(img),
               ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
-              description,
-              style: const TextStyle(color: Colors.black),
+              desc,
               textAlign: TextAlign.justify,
             ),
           ),
-          ButtonBar(
-            alignment: MainAxisAlignment.start,
-            children: [
-              TextButton(
-                style: TextButton.styleFrom(
-                  foregroundColor: const Color(0xFF6200EE),
-                ),
-                onPressed: () {
-                  // Perform some action
-                },
-                child: const Text('SEE IN MAP'),
-              ),
-            ],
-          ),
+          // ButtonBar(
+          //   alignment: MainAxisAlignment.start,
+          //   children: [
+          //     TextButton(
+          //       onPressed: () {
+          //         // Perform some action
+          //       },
+          //       child: const Text('SEE IN MAP'),
+          //     ),
+          //   ],
+          // ),
         ],
       ),
     );

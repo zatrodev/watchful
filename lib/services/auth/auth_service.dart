@@ -42,7 +42,10 @@ class AuthService {
     return credential;
   }
 
-  signOut() async {
-    await FirebaseAuth.instance.signOut();
+   logOut() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await FirebaseAuth.instance.signOut();
+    }
   }
 }

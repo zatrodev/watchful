@@ -11,7 +11,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
-      backgroundColor: Colors.green,
+      backgroundColor: Colors.green[800],
       title: const Text(
         "WATCHFUL",
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),

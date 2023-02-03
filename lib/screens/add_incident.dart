@@ -1,8 +1,16 @@
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_sms/flutter_sms.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:watchful/services/cloud/cloud_storage_constants.dart';
+import 'package:watchful/services/cloud/firebase_cloud_storage.dart';
+import 'package:watchful/utilities/utils.dart';
 import 'package:watchful/widgets/image_placeholder.dart';
 
 class AddIncidentPage extends StatefulWidget {
@@ -15,7 +23,39 @@ class AddIncidentPage extends StatefulWidget {
 }
 
 class _AddIncidentPageState extends State<AddIncidentPage> {
+  late final FirebaseCloudStorage service;
+
   final _formKey = GlobalKey<FormBuilderState>();
+  File? _img;
+
+  @override
+  void initState() {
+    service = FirebaseCloudStorage();
+    super.initState();
+  }
+
+  Future<void> submitIncident() async {
+    final date = _formKey.currentState!.value[dateFieldName];
+    final desc = _formKey.currentState!.value[descFieldName];
+    final loc = _formKey.currentState!.value[locFieldName];
+    final type = _formKey.currentState!.value[typeFieldName];
+
+    await service.createIncident(
+        ownerUserId: FirebaseAuth.instance.currentUser!.uid,
+        date:
+            "${intToMonth(date.month)} ${date.day} | ${DateFormat('hh:mm a').format(date)}",
+        desc: desc,
+        img: _img,
+        loc: loc,
+        type: type);
+
+    final phoneNumbers = await service.getAllNumbers();
+
+    await sendSMS(
+        message:
+            "INCIDENT REPORT \n\n A $type occurred in $date at $loc. The reported said, '$desc'. \n\n Take care.",
+        recipients: phoneNumbers.toList());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +75,17 @@ class _AddIncidentPageState extends State<AddIncidentPage> {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              const ImagePlaceholder(),
+              ImagePlaceholder(
+                onTap: () async {
+                  XFile? xImage =
+                      await ImagePicker().pickImage(source: ImageSource.camera);
+
+                  setState(() {
+                    _img = File(xImage!.path);
+                  });
+                },
+                image: _img,
+              ),
               FormBuilder(
                 key: _formKey,
                 onChanged: () {
@@ -89,6 +139,7 @@ class _AddIncidentPageState extends State<AddIncidentPage> {
                           },
                         ),
                       ),
+                      validator: FormBuilderValidators.required(),
                     ),
                   ],
                 ),
@@ -100,11 +151,17 @@ class _AddIncidentPageState extends State<AddIncidentPage> {
                       onPressed: () {
                         if (_formKey.currentState?.saveAndValidate() ?? false) {
                           debugPrint(_formKey.currentState?.value.toString());
+                          submitIncident().then((value) {
+                            Navigator.pop(context);
+                          });
                         } else {
                           debugPrint(_formKey.currentState?.value.toString());
                           debugPrint('validation failed');
                         }
                       },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                      ),
                       child: const Text(
                         'Submit',
                         style: TextStyle(color: Colors.white),
@@ -116,6 +173,10 @@ class _AddIncidentPageState extends State<AddIncidentPage> {
                     child: OutlinedButton(
                       onPressed: () {
                         _formKey.currentState?.reset();
+
+                        setState(() {
+                          _img = null;
+                        });
                       },
                       child: Text(
                         'Reset',

@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:watchful/auth_service.dart';
+import 'package:watchful/services/auth/auth_service.dart';
 import 'package:watchful/firebase_options.dart';
 import 'package:watchful/screens/add_incident.dart';
 import 'package:watchful/screens/phone_auth.dart';
@@ -21,7 +21,7 @@ class Watchful extends StatelessWidget {
       title: 'Watchful',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
       ),
       themeMode: ThemeMode.system,
       initialRoute: '/',
