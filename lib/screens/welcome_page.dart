@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:watchful/services/auth/auth_service.dart';
 import 'package:flutter/material.dart';
@@ -72,7 +74,8 @@ class WelcomePage extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     AuthService().signInWithGoogle().then((credential) {
-                      if (credential.user!.phoneNumber != "") {
+                      log(credential.user!.toString());
+                      if (credential.user!.phoneNumber != null) {
                         Navigator.pushNamedAndRemoveUntil(
                           context,
                           '/',

@@ -1,42 +1,90 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const HomeAppBar({super.key});
+class HomeAppBar extends StatelessWidget {
+  final bool innerBoxIsScrolled;
+  final Function filterIncidents;
 
-  @override
-  Size get preferredSize => const Size.fromHeight(56);
+  const HomeAppBar(
+      {super.key,
+      required this.innerBoxIsScrolled,
+      required this.filterIncidents});
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
+    return SliverAppBar(
+      pinned: true,
+      floating: true,
+      expandedHeight: 144,
+      forceElevated: innerBoxIsScrolled,
       automaticallyImplyLeading: false,
-      backgroundColor: Colors.green[800],
-      title: const Text(
-        "WATCHFUL",
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-      ),
-      centerTitle: true,
-      leading: SizedBox(
-        width: 58,
-        child: IconButton(
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-            icon: FirebaseAuth.instance.currentUser!.photoURL != null
-                ? CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        FirebaseAuth.instance.currentUser!.photoURL!),
-                    radius: 15,
-                  )
-                : const Icon(Icons.account_circle_rounded)),
-      ),
-      actions: const [
-        Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Icon(Icons.search),
+      backgroundColor: const Color.fromRGBO(208, 240, 192, 1),
+      shadowColor: Theme.of(context).shadowColor,
+      shape: const ContinuousRectangleBorder(
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(50),
+              bottomRight: Radius.circular(50))),
+      elevation: 8.0,
+      flexibleSpace: Padding(
+        padding: const EdgeInsets.fromLTRB(8.0, 12.0, 8.0, 12.0),
+        child: Container(
+          width: 100,
+          height: 50,
+          color: Colors.transparent,
+          child: Center(
+            child: TextField(
+              onChanged: (value) => filterIncidents(value),
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                      borderSide:
+                          const BorderSide(width: 0, style: BorderStyle.none)),
+                  filled: true,
+                  contentPadding: const EdgeInsets.all(16),
+                  hintText: 'Search incidents...',
+                  prefixIcon: const Icon(Icons.search),
+                  suffixIcon: FirebaseAuth.instance.currentUser!.photoURL !=
+                          null
+                      ? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: GestureDetector(
+                            onTap: () => Scaffold.of(context).openDrawer(),
+                            child: CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                  FirebaseAuth.instance.currentUser!.photoURL!),
+                              radius: 10,
+                            ),
+                          ),
+                        )
+                      : const Icon(Icons.account_circle_rounded)),
+            ),
+          ),
         ),
-      ],
+      ),
+      bottom: const TabBar(
+        indicator: UnderlineTabIndicator(
+            borderSide: BorderSide(width: 2),
+            insets: EdgeInsets.symmetric(horizontal: 16.0)),
+        indicatorColor: Color(0xFF3e4839),
+        labelColor: Colors.black,
+        unselectedLabelColor: Color(0xFF3e4839),
+        tabs: <Tab>[
+          Tab(
+            icon: Icon(
+              Icons.map_sharp,
+              color: Color(0xFF3e4839),
+            ),
+            text: "Map",
+          ),
+          Tab(
+            icon: Icon(
+              Icons.warning_amber_sharp,
+              color: Color(0xFF3e4839),
+            ),
+            text: "Incidents",
+          ),
+        ],
+      ),
     );
   }
 }

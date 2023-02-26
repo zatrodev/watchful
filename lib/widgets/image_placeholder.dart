@@ -41,18 +41,14 @@ class _ImagePlaceholderState extends State<ImagePlaceholder> {
                     ],
                   ),
                 )
-              : Transform(
-                  alignment: Alignment.center,
-                  transform: Matrix4.rotationZ(-3.14 / 2),
-                  child: Container(
-                      height: 300,
-                      width: 300,
-                      padding: const EdgeInsets.all(10.0),
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                            fit: BoxFit.cover, image: FileImage(widget.image!)),
-                      )),
-                ),
+              : Container(
+                  height: 300,
+                  width: 300,
+                  padding: const EdgeInsets.all(10.0),
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                        fit: BoxFit.cover, image: FileImage(widget.image!)),
+                  )),
         ));
   }
 }

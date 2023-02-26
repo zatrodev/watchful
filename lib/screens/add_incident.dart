@@ -4,10 +4,10 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_sms/flutter_sms.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:telephony/telephony.dart';
 import 'package:watchful/services/cloud/cloud_storage_constants.dart';
 import 'package:watchful/services/cloud/firebase_cloud_storage.dart';
 import 'package:watchful/utilities/utils.dart';
@@ -40,21 +40,26 @@ class _AddIncidentPageState extends State<AddIncidentPage> {
     final loc = _formKey.currentState!.value[locFieldName];
     final type = _formKey.currentState!.value[typeFieldName];
 
+    final formattedDate =
+        "${intToMonth(date.month)} ${date.day} | ${DateFormat('hh:mm a').format(date)}";
+
     await service.createIncident(
         ownerUserId: FirebaseAuth.instance.currentUser!.uid,
-        date:
-            "${intToMonth(date.month)} ${date.day} | ${DateFormat('hh:mm a').format(date)}",
+        date: formattedDate,
         desc: desc,
         img: _img,
         loc: loc,
         type: type);
 
+    final Telephony telephony = Telephony.instance;
     final phoneNumbers = await service.getAllNumbers();
 
-    await sendSMS(
-        message:
-            "INCIDENT REPORT \n\n A $type occurred in $date at $loc. The reported said, '$desc'. \n\n Take care.",
-        recipients: phoneNumbers.toList());
+    for (final phoneNumber in phoneNumbers) {
+      telephony.sendSms(
+          to: phoneNumber,
+          message:
+              "INCIDENT REPORT \n\n A $type occurred in $formattedDate at $loc. The reported said, '$desc'. \n\n Take care.");
+    }
   }
 
   @override

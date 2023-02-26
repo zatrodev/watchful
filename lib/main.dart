@@ -21,7 +21,8 @@ class Watchful extends StatelessWidget {
       title: 'Watchful',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        colorSchemeSeed: const Color(0xFFDCEDC8),
+        useMaterial3: true,
       ),
       themeMode: ThemeMode.system,
       initialRoute: '/',
