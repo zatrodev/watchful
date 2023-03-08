@@ -41,7 +41,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
         ListTile(
           leading: const Icon(
             Icons.home,
-            color: Colors.black,
           ),
           title: const Text("Home"),
           dense: true,
@@ -53,7 +52,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
         ListTile(
           leading: const Icon(
             Icons.account_box,
-            color: Colors.black,
           ),
           title: const Text("About Us"),
           dense: true,
@@ -65,7 +63,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
         ListTile(
           leading: const Icon(
             Icons.contact_mail,
-            color: Colors.black,
           ),
           title: const Text("Contacts"),
           dense: true,
@@ -80,7 +77,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
             child: ListTile(
               leading: const Icon(
                 Icons.logout,
-                color: Colors.black,
               ),
               title: const Text('Log Out'),
               onTap: () {

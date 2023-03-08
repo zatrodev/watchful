@@ -20,11 +20,7 @@ class Watchful extends StatelessWidget {
     return MaterialApp(
       title: 'Watchful',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorSchemeSeed: const Color(0xFFDCEDC8),
-        useMaterial3: true,
-      ),
-      themeMode: ThemeMode.system,
+      theme: ThemeData.dark(),
       initialRoute: '/',
       routes: {
         '/': (context) => AuthService().handleAuthState(),

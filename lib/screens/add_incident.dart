@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 import 'dart:io';
 
@@ -5,6 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:telephony/telephony.dart';
@@ -24,6 +28,8 @@ class AddIncidentPage extends StatefulWidget {
 
 class _AddIncidentPageState extends State<AddIncidentPage> {
   late final FirebaseCloudStorage service;
+
+  String? _currentLocation;
 
   final _formKey = GlobalKey<FormBuilderState>();
   File? _img;
@@ -62,12 +68,56 @@ class _AddIncidentPageState extends State<AddIncidentPage> {
     }
   }
 
+  Future<bool> _handleLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location services are disabled. Please enable the services')));
+      return false;
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location permissions are denied')));
+        return false;
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location permissions are permanently denied, we cannot request permissions.')));
+      return false;
+    }
+    return true;
+  }
+
+  Future<String> _getCurrentLocation() async {
+    final hasPermission = await _handleLocationPermission();
+
+    if (!hasPermission) return "";
+
+    final position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    final placeMarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+
+    final place = placeMarks[0];
+
+    return '${place.thoroughfare}, ${place.locality}, ${place.subAdministrativeArea}';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        foregroundColor: Colors.black,
         elevation: 0,
         title: const Text(
           "NEW REPORT",
@@ -128,6 +178,7 @@ class _AddIncidentPageState extends State<AddIncidentPage> {
                       ),
                       validator: FormBuilderValidators.required(),
                       textInputAction: TextInputAction.next,
+                      initialValue: _currentLocation,
                     ),
                     FormBuilderDateTimePicker(
                       name: 'date',
@@ -181,6 +232,11 @@ class _AddIncidentPageState extends State<AddIncidentPage> {
 
                         setState(() {
                           _img = null;
+                        });
+
+                        _getCurrentLocation().then((location) {
+                          _formKey.currentState!.fields['loc']!
+                              .didChange(location);
                         });
                       },
                       child: Text(
