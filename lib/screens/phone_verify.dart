@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 import 'package:watchful/services/auth/auth_service.dart';
+import 'package:watchful/widgets/custom_snackbar.dart';
 
 class PhoneVerifyPage extends StatefulWidget {
   const PhoneVerifyPage({Key? key}) : super(key: key);
@@ -61,7 +62,6 @@ class _PhoneVerifyPageState extends State<PhoneVerifyPage> {
           },
           icon: const Icon(
             Icons.arrow_back_ios_rounded,
-            color: Colors.black,
           ),
         ),
         elevation: 0,
@@ -116,18 +116,23 @@ class _PhoneVerifyPageState extends State<PhoneVerifyPage> {
                       backgroundColor: Colors.green.shade600,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10))),
-                  onPressed: () async {
+                  onPressed: () {
                     try {
                       AuthService()
                           .verifyPhoneNumber(_smsCodeController.text)
-                          .then((credential) {
+                          .then((credential) async {
                         FirebaseAuth.instance.currentUser!
                             .linkWithCredential(credential)
                             .then((value) => Navigator.pushNamedAndRemoveUntil(
                                 context, "/", (route) => false));
                       });
                     } catch (e) {
-                      // catch error
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: CustomSnackBar(errorText: e.toString()),
+                        backgroundColor: Colors.transparent,
+                        behavior: SnackBarBehavior.floating,
+                        elevation: 0,
+                      ));
                     }
                   },
                   child: const Text("Verify Phone Number")),
@@ -136,15 +141,10 @@ class _PhoneVerifyPageState extends State<PhoneVerifyPage> {
               children: [
                 TextButton(
                     onPressed: () {
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        '/',
-                        (route) => false,
-                      );
+                      Navigator.pop(context);
                     },
                     child: const Text(
                       "Edit Phone Number ?",
-                      style: TextStyle(color: Colors.black),
                     ))
               ],
             )

@@ -11,24 +11,25 @@ class CloudIncident {
   final String img;
   final String loc;
   final String type;
+  final int reportCount;
 
-  const CloudIncident({
-    required this.documentId,
-    required this.ownerUserId,
-    required this.date,
-    required this.desc,
-    required this.img,
-    required this.loc,
-    required this.type,
-  });
+  const CloudIncident(
+      {required this.documentId,
+      required this.ownerUserId,
+      required this.date,
+      required this.desc,
+      required this.img,
+      required this.loc,
+      required this.type,
+      required this.reportCount});
 
-  CloudIncident.fromSnapshot(
-      QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
+  CloudIncident.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot)
       : documentId = snapshot.id,
-        ownerUserId = snapshot.data()[ownerUserFieldName],
-        date = snapshot.data()[dateFieldName] as String,
-        desc = snapshot.data()[descFieldName] as String,
-        img = snapshot.data()[imgFieldName] as String,
-        loc = snapshot.data()[locFieldName] as String,
-        type = snapshot.data()[typeFieldName] as String;
+        ownerUserId = snapshot.data()![ownerUserFieldName],
+        date = snapshot.data()![dateFieldName] as String,
+        desc = snapshot.data()![descFieldName] as String,
+        img = snapshot.data()![imgFieldName] as String,
+        loc = snapshot.data()![locFieldName] as String,
+        type = snapshot.data()![typeFieldName] as String,
+        reportCount = snapshot.data()![reportFieldName];
 }

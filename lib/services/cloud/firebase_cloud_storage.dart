@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -31,9 +32,31 @@ class FirebaseCloudStorage {
     }
   }
 
+  Future<void> addNumber(number) async {
+    try {
+      await _phone.add({numberFieldName: number});
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
   Future<void> deleteIncident({required String documentId}) async {
     try {
       await _incidents.doc(documentId).delete();
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<void> updateReportCount({required String documentId}) async {
+    log(documentId.toString());
+    try {
+      await _incidents.doc(documentId).get().then((doc) async {
+        final data = CloudIncident.fromSnapshot(doc);
+        await _incidents
+            .doc(documentId)
+            .update({reportFieldName: data.reportCount + 1});
+      });
     } catch (e) {
       throw Exception();
     }
@@ -57,7 +80,8 @@ class FirebaseCloudStorage {
       descFieldName: desc,
       imgFieldName: imgDownloadUrl,
       locFieldName: loc,
-      typeFieldName: type
+      typeFieldName: type,
+      reportFieldName: 0
     });
 
     final fetchedIncident = await document.get();
@@ -69,7 +93,8 @@ class FirebaseCloudStorage {
         desc: desc,
         img: imgDownloadUrl,
         loc: loc,
-        type: type);
+        type: type,
+        reportCount: 0);
   }
 
   static final FirebaseCloudStorage _instance =

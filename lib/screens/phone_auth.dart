@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:watchful/services/cloud/firebase_cloud_storage.dart';
+import 'package:watchful/widgets/custom_snackbar.dart';
 
 class PhoneAuthPage extends StatefulWidget {
   const PhoneAuthPage({Key? key}) : super(key: key);
@@ -126,11 +128,19 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                       phoneNumber: phoneNumber,
                       verificationCompleted:
                           (PhoneAuthCredential credential) async {
+                        final incidentsService = FirebaseCloudStorage();
+                        await incidentsService.addNumber(phoneNumber);
                         await FirebaseAuth.instance
                             .signInWithCredential(credential);
                       },
                       verificationFailed: (FirebaseAuthException e) {
-                        // catch error
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content:
+                              CustomSnackBar(errorText: e.message.toString()),
+                          backgroundColor: Colors.transparent,
+                          behavior: SnackBarBehavior.floating,
+                          elevation: 0,
+                        ));
                       },
                       codeSent: (String verificationId, int? resendToken) {
                         PhoneAuthPage.verificationId = verificationId;

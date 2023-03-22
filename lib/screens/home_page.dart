@@ -10,8 +10,6 @@ const secondaryColor = 0xFFFFFDD0;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-  static final GlobalKey<ScaffoldState> scaffoldKey =
-      GlobalKey<ScaffoldState>();
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -51,7 +49,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: HomePage.scaffoldKey,
       drawer: const Drawer(
         child: CustomDrawer(),
       ),
@@ -102,7 +99,8 @@ class _HomePageState extends State<HomePage> {
             )),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
+          _emptyIncidents();
           Navigator.pushNamed(context, "addIncident");
         },
         backgroundColor: const Color(primaryColor),
@@ -122,18 +120,21 @@ class IncidentList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-        padding: const EdgeInsets.fromLTRB(0, 10.0, 0, 10.0),
+        padding: const EdgeInsets.fromLTRB(0, 10.0, 0, 0),
         separatorBuilder: (context, index) => const SizedBox(
               height: 10,
             ),
         itemCount: displayedIncidents.length,
         itemBuilder: ((_, index) {
           return IncidentCard(
-              type: displayedIncidents[index].type,
-              desc: displayedIncidents[index].desc,
-              loc: displayedIncidents[index].loc,
-              date: displayedIncidents[index].date,
-              img: displayedIncidents[index].img);
+            documentId: displayedIncidents[index].documentId,
+            type: displayedIncidents[index].type,
+            desc: displayedIncidents[index].desc,
+            loc: displayedIncidents[index].loc,
+            date: displayedIncidents[index].date,
+            img: displayedIncidents[index].img,
+            context: context,
+          );
         }));
   }
 }
@@ -216,7 +217,7 @@ class HomeAppBar extends StatelessWidget {
               bottomRight: Radius.circular(50))),
       elevation: 8.0,
       flexibleSpace: Padding(
-        padding: const EdgeInsets.fromLTRB(8.0, 12.0, 8.0, 12.0),
+        padding: const EdgeInsets.fromLTRB(8.0, 20.0, 8.0, 12.0),
         child: Container(
           width: 100,
           height: 50,
@@ -263,7 +264,7 @@ class HomeAppBar extends StatelessWidget {
         ),
       ),
       bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(90),
+        preferredSize: const Size.fromHeight(68),
         child: TabBar(
           indicator: const UnderlineTabIndicator(
             insets: EdgeInsets.symmetric(horizontal: 16.0),

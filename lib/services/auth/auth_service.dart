@@ -38,9 +38,10 @@ class AuthService {
     return credential;
   }
 
-   logOut() async {
+  logOut() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
+      await GoogleSignIn().signOut();
       await FirebaseAuth.instance.signOut();
     }
   }
